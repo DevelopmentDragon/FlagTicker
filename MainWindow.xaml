@@ -8,27 +8,34 @@
         Title="Flag Ticker" Height="617" Width="1277" SizeToContent="WidthAndHeight">
     <Viewbox>
         <Grid Height="546" Width="1281">
-            <Button x:Name="setButton" Content="Set" HorizontalAlignment="Left" Margin="593,308,0,0" VerticalAlignment="Top" Height="32" Width="64"/>
-            <Button x:Name="defaultButton" Content="Default" HorizontalAlignment="Left" Margin="665,308,0,0" VerticalAlignment="Top" Height="32" Width="64"/>
-            <Button x:Name="fillButton" Content="Fill" HorizontalAlignment="Left" Margin="737,308,0,0" VerticalAlignment="Top" Height="32" Width="64"/>
-            <Button x:Name="clearButton" Content="Clear" HorizontalAlignment="Left" Margin="809,308,0,0" VerticalAlignment="Top" Height="32" Width="64"/>
-            <Label x:Name="fieldlabel" Content="Flag Value" HorizontalAlignment="Left" Margin="385,308,0,0" VerticalAlignment="Top" Height="32" Width="64"/>
-            <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="32" Margin="457,308,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="128"/>
-            <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Height="188" Margin="385,345,0,0" VerticalAlignment="Top" Width="865">
+            <Button x:Name="setButton" Content="Set" Click="setButton_OnClick" HorizontalAlignment="Left" Margin="593,308,0,0" VerticalAlignment="Top" Height="32" Width="64" AutomationProperties.HelpText="Set all subflags to fit the field value."/>
+            <Button x:Name="defaultButton" Content="Default" HorizontalAlignment="Left" Margin="665,308,0,0" VerticalAlignment="Top" Height="32" Width="64" AutomationProperties.HelpText="Set all subflags to their default values."/>
+            <Button x:Name="fillButton" Content="Fill" HorizontalAlignment="Left" Margin="737,308,0,0" VerticalAlignment="Top" Height="32" Width="64" AutomationProperties.HelpText="Force all subflags to true."/>
+            <Button x:Name="clearButton" Content="Clear" HorizontalAlignment="Left" Margin="809,308,0,0" VerticalAlignment="Top" Height="32" Width="64" AutomationProperties.HelpText="Force all subflags to false."/>
+            <Label x:Name="fieldlabel" Content="Flag Value" HorizontalAlignment="Left" Margin="385,308,0,0" VerticalAlignment="Top" Height="32" Width="64" AutomationProperties.HelpText="Display flag value or enter value to set subflags."/>
+            <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="32" Margin="457,308,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="128"/>
+            <DataGrid x:Name="dataGrid" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="188" Margin="385,345,0,0" VerticalAlignment="Top" Width="865">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Bit" Binding="{Binding Path=Bit}"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Path=DisplayName}"/>
-                    <DataGridTextColumn Header="Toggle" Binding="{Binding Path=Toggle}"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Path=Description}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Bit" Binding="{Binding Path=Bit}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Path=DisplayName}"/>
+                    <DataGridTemplateColumn Header="Toggle">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Tag="{Binding Path=Bit}" Text="{Binding Path=Toggle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDown="CheckCommand"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Path=Description}"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <ListView x:Name="listView" HorizontalAlignment="Left" Height="135" Margin="386,161,0,0" VerticalAlignment="Top" Width="861" SelectionChanged="MySelectionChanged">
+            <ListView x:Name="listView" HorizontalAlignment="Left" Height="135" Margin="386,161,0,0" VerticalAlignment="Top" Width="861" SelectionChanged="ClickFlag">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Varriables">
                         <GridViewColumn Header="Name" Width="240" DisplayMemberBinding="{Binding Path=DisplayName}"/>
                         <GridViewColumn Header="Varriable Name" Width="120" DisplayMemberBinding="{Binding Path=Name}"/>
                         <GridViewColumn Header="Bit(s)" Width="120" DisplayMemberBinding="{Binding Path=Bits}"/>
-                        <GridViewColumn Header="Description" Width="380" DisplayMemberBinding="{Binding Path=Description}"/>
+                        <GridViewColumn Header="Value" Width="120" DisplayMemberBinding="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+                        <GridViewColumn Header="Description" Width="255" DisplayMemberBinding="{Binding Path=Description}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

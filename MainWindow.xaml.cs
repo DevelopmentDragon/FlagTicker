@@ -79,7 +79,6 @@ namespace HL_FlagTicker
                 subflags = new List<SubFlag>();
             }
 
-
             public string Name
             {
                 get { return this.name; }
@@ -110,7 +109,7 @@ namespace HL_FlagTicker
                     ulong rValue = 0;
                     foreach (SubFlag sub in subflags)
                     {
-                        rValue += (ulong)(sub.Toggle ? 1 : 0) * sub.Bit;
+                        rValue += (ulong)(sub.Toggle ? 1 : 0) * (ulong)(1 << (int)sub.Bit);
                     }
 
                     return rValue;
@@ -235,17 +234,22 @@ namespace HL_FlagTicker
 
             this.DataContext = flaglist;
             listView.ItemsSource = flaglist;
-            dataGrid.ItemsSource = subflaglist;
-        }
-
-        public void ChangeSubFlagList()
-        {
             dataGrid.ItemsSource = null;
+            textBox.Text = string.Empty;
         }
 
-        public void ChangeFlagList()
+        public void ChangeSubFlagList(List<SubFlag> subflags)
         {
+            this.subflaglist = subflags;
+            dataGrid.ItemsSource = null;
+            dataGrid.ItemsSource = subflags;
+        }
 
+        public void ChangeFlagList(List<Flag> flags)
+        {
+            this.flaglist = flags;
+            listView.ItemsSource = null;
+            listView.ItemsSource = flags;
         }
 
         public void ChangeObject()
@@ -253,12 +257,86 @@ namespace HL_FlagTicker
 
         }
 
+        // Toggle Input States depending on whether or not we have subflags. They should be disabled by default unless we have subflags
+        public void ToggleInputs()
+        {
+
+        }
+
         public List<Flag> Flags() { return flaglist; }
 
         // For now a test for handling change of subflag elements
-        private void MySelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void ClickCategory(object sender, SelectionChangedEventArgs e)
         {
-            ChangeSubFlagList();
+
+        }
+
+        private void ClickObject(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = e.AddedItems[0] as FTObject;
+            if (selectedItem != null)
+            { 
+                //ChangeFlagList(selectedItem.Flags)
+            }
+        }
+
+        // Click on a flag, change subflag list
+        private void ClickFlag(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = e.AddedItems[0] as Flag;
+            if (selectedItem != null)
+            {
+                ChangeSubFlagList(selectedItem.SubFlags);
+            }
+        }
+
+        // Click on a subflag, change flag value field
+        private void ClickSubFlag(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        //private void ChangeValueField(object sender, )
+
+        // Handlder for clicking the set button
+        private void setButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (subflaglist != null)
+            {
+                // Collect value from text box
+                if (String.IsNullOrEmpty(textBox.Text))
+                    return;
+
+                ulong collectedValue = ulong.Parse(textBox.Text);
+
+                foreach (SubFlag sub in subflaglist)
+                {
+                    sub.Toggle = ((collectedValue & (ulong)(1 << (int)sub.Bit)) != 0) ? true : false;
+                }
+
+                ChangeSubFlagList(subflaglist); // Refresh
+            }
+        }
+
+        private void CheckCommand(object sender, RoutedEventArgs e)
+        {
+            var origin = e.Source as TextBlock;
+
+            if (origin != null)
+            {
+                uint bit = UInt32.Parse(origin.Tag.ToString());
+                bool toggle = Boolean.Parse(origin.Text);
+                toggle = !toggle; // We're toggling this
+
+                foreach (SubFlag sub in subflaglist)
+                {
+                        if (sub.Bit == bit) sub.Toggle = (bool)toggle;
+                }
+
+                ChangeSubFlagList(subflaglist); // Refresh
+                //MessageBox.Show(origin.Tag.ToString());
+            }
         }
     }
 }
