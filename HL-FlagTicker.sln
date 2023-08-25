@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34004.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HL-FlagTicker", "HL-FlagTicker.csproj", "{2F23A38A-8109-4C5C-A56A-0E16F99D1243}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F23A38A-8109-4C5C-A56A-0E16F99D1243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F23A38A-8109-4C5C-A56A-0E16F99D1243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F23A38A-8109-4C5C-A56A-0E16F99D1243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F23A38A-8109-4C5C-A56A-0E16F99D1243}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CB10896-9FBF-4BC2-A946-2D8943DE9FF5}
+	EndGlobalSection
+EndGlobal
